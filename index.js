@@ -5,7 +5,9 @@ require('dotenv').config();
 
 // enable CORS
  const cors = require('cors');
-app.use(cors({ optionsSuccessStatus: 200 })); // some legacy browsers choke on 204
+
+app.enable('trust proxy')
+ app.use(cors({ optionsSuccessStatus: 200 }));
 
 
 app.use(express.static('public'));
@@ -13,9 +15,19 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+app.get("/api/whoami",(req,res,next)=>{
+
+  console.log(req.headers)
+  res.json({
+    ipadress: req.ip,
+    language:  req.headers['accept-language'],
+    software:req.headers['user-agent']
+  })
+  
+})
 
 
 
-app.listen(POrt, function () {
-  console.log('Your app is listening on port ' + listener.address().port);
+app.listen(PORT, function () {
+  console.log('Your app is listening on port ' + PORT);
 });
